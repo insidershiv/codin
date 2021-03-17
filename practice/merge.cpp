@@ -3,44 +3,40 @@ using namespace std;
 
 
 
-void merge(vector<int> &arr, int p, int q, int end)
+void merge(vector<int> &arr, int p,int q, int r, int s)
 {
 
-    vector<int> result;
+    
+    int i = p;
+    int j = r;
     int k = 0;
-    int i = 0 , j= 0 ;
-    while (p < end && j <end)
-    {
-
-        while( i <= q && j <=end){
-
-            
-
-
-        if (arr[i] < arr[j])
-        {
-            result.push_back(arr[i]);
+    vector<int> res(s-p+1);
+    while(i <= q && j <= s){
+        if(arr[i] < arr[j]){
+            res[k] = arr[i];
             i++;
-        }
-        else
-        {
-            result.push_back(arr[j]);
+        } else{
+            res[k] = arr[j];
             j++;
-        }
-
-        }
-        if(i >q && j < end){
-            result.push_back(arr[j]);
-            j++;
-        }
-        if(j < end && i <q){
-            result.push_back(arr[i]);
-            i++;
-        }
-
-
+        }   
+        k++;
     }
 
+    while(i<=q){
+        res[k] = arr[i];
+        i++;
+        k++;
+    }
+
+    while(j<=s){
+        res[k] = arr[j];
+        j++;
+        k++;
+    }
+
+    for(int i = p,k=0; i <=s; i++,k++){
+        arr[i] = res[k];
+    }
 
   
 }
@@ -48,16 +44,20 @@ void merge(vector<int> &arr, int p, int q, int end)
 void mergesort(vector<int> &arr, int p, int q)
 {
 
+
     int mid = p + (q-p)/2;
 
-    while (p < q)
-    {
+    if(p>=q){
+        return;
+    }
+   
+    //cout<<mid <<"  "<< p <<"  "<<q<<" ";
 
         mergesort(arr, p, mid);
         mergesort(arr, mid + 1, q);
-        merge(arr, p, mid, q);
+        merge(arr,  p, mid, mid+1,q);
 
-    }
+    
 }
 
 int main()
@@ -74,10 +74,14 @@ int main()
         arr.push_back(ele);
     }
 
+    //cout<<size;
+    mergesort(arr, 0 , size-1);
 
-    mergesort(arr, 0 , size);
+    cout<<"\n";
 
-
+    for(int i = 0 ; i<arr.size() ; i++){
+        cout<<arr[i]<<" ";
+    }
 
     return 0;
 }
